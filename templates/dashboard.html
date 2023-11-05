@@ -5,13 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Portal</title>
     <link rel="stylesheet" href="../static/style_index.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchButton = document.querySelector('.cta-button');
+            const jobDescriptionForm = document.getElementById('jobDescriptionForm');
+
+            searchButton.addEventListener('click', function() {
+                jobDescriptionForm.style.visibility = 'visible';
+            });
+        });
+    </script>
+    <!-- Your HTML content -->
+<script>
+    function searchJobDescription() {
+        const jobDescription = document.getElementById('jobDescription').value;
+
+        // AJAX request to send the job description to Flask route
+        fetch('/search_job_description', {
+            method: 'POST',
+            body: new URLSearchParams({ job_description: jobDescription }),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response data from the server
+            console.log('Result from server:', data.result);
+            // Do something with the result, like displaying it on the page
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+   
+</script>
+<!-- Your HTML content -->
+
 </head>
 <body>
     <header>
-        <h1>Welcome to the Job Portal</h1>
-        <div class="auth-buttons">
-            <a href="/login" class="button">Login</a>
-            <a href="/signup" class="button">Sign Up</a>
+        <h1>Dashboard</h1>
+        <div class="login-signup">
+            <a href="/logout" class="button">Log out </a>
         </div>
         <nav>
             <ul>
@@ -29,20 +66,25 @@
             <p>Search for jobs, explore companies, and get hired.</p>
             <a href="#search" class="cta-button">Search Jobs</a>
         </section>
+        <div style="visibility: hidden;">
+            <form id="jobDescriptionForm">
+                <label for="jobDescription">Job Description:</label><br>
+                <input id="jobDescription" name="jobDescription" ></input><br><br>
+                <input type="submit" value="Submit" onsubmit="searchJobDescription() ">
+            </form>
+        </div>
+
 
         <section class="features">
-            <h2>Why Choose Us?</h2>
             <div class="feature">
-                <h3>Wide Range of Jobs</h3>
-                <p>Explore diverse job opportunities in various fields.</p>
-            </div>
-            <div class="feature">
-                <h3>Company Profiles</h3>
-                <p>Learn about different companies and their cultures.</p>
-            </div>
-            <div class="feature">
-                <h3>User-Friendly Interface</h3>
-                <p>Easily navigate and find what you're looking for.</p>
+                <h3>Welcome {{session["username"]}}</h3>
+                <h3>
+                {{session["email"]}}
+
+                </h3>
+                <h3>
+                    {{session["phone"]}}
+                </h3>
             </div>
         </section>
     </main>
